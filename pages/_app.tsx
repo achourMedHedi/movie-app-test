@@ -2,9 +2,13 @@ import App from "next/app";
 import React from "react";
 import { Provider } from "mobx-react";
 import { fetchInitialStoreState, TestStore } from "../stores/TestStore";
+import '../styles/globals.css'
 
+interface IState  {
+  testStore: TestStore,
+}
 class MyApp extends App {
-  state = {
+  state: IState = {
     testStore: new TestStore()
   };
 
@@ -20,7 +24,7 @@ class MyApp extends App {
   }
 
   // Hydrate serialized state to store
-  static getDerivedStateFromProps(props: any, state: any) {
+  static getDerivedStateFromProps(props: any, state: IState) {
     state.testStore.hydrate(props.initialStoreState);
     return state;
   }
