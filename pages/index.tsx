@@ -34,7 +34,7 @@ const Home: NextPage<TProps> = () => {
     try {
       setLoading(true)
       const result = await fetchMoviesListApi()
-      setMoviesList(result)
+      setMoviesList(result.slice(0,10))
       setFetchApiErrorStatus(200)
       setLoading(false)
     } catch (error) {
@@ -50,7 +50,7 @@ const Home: NextPage<TProps> = () => {
     try {
       setLoading(true)
       const result = await fetchTvShowsListApi()
-      setTvShowsList(result)
+      setTvShowsList(result.slice(0,10))
       setFetchApiErrorStatus(200)
       return setLoading(false)
     } catch (error: any) {
