@@ -10,7 +10,8 @@ import Header from '../components/indexPage/Header/Header'
 import NavBar from '../components/navBar/NavBar.component'
 import Tabs from '../components/tabs/Tabs.component'
 import { TActiveTab } from '../components/tabs/tabs.types'
-import { TMovie, TProps, TTvShows } from '../pagesTypes/home.types'
+import { API_KEY } from '../contants'
+import { TMovie, TMoviesApiResponse, TPropsHomePage, TTvShows } from '../pagesTypes/home.types'
 import { fetchMoviesListApi } from '../services/movies.service'
 import { fetchTvShowsListApi } from '../services/twShows.service'
 import { CarouselContainer } from '../styles/home.styles'
@@ -18,17 +19,12 @@ import { CarouselContainer } from '../styles/home.styles'
 
 
 // const Home: NextPage<TProps> = ({ testStore }) => {
-const Home: NextPage<TProps> = () => {
+const Home: NextPage<TPropsHomePage> = ({ moviesListApiResult, statusCode }) => {
   const [activeTab, setActiveTab] = useState<TActiveTab>("movies")
-  const [moviesList, setMoviesList] = useState<TMovie[]>([])
+  const [moviesList, setMoviesList] = useState<TMovie[]>(moviesListApiResult)
   const [tvShowsList, setTvShowsList] = useState<TTvShows[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [fetchApiStatus, setFetchApiStatus] = useState<number | undefined>()
-
-  useEffect(() => {
-    fetchMovies()
-  }, [])
-
+  const [fetchApiStatusCode, setFetchApiStatusCode] = useState<number | undefined>(statusCode)
 
   const fetchMovies = async () => {
     try {
@@ -36,11 +32,11 @@ const Home: NextPage<TProps> = () => {
       const result = await fetchMoviesListApi()
       setMoviesList(result.slice(0, 10))
       setLoading(false)
-      setFetchApiStatus(200)
+      setFetchApiStatusCode(200)
     } catch (error) {
       const err = error as AxiosError
       if (err.response) {
-        setFetchApiStatus(err.response.status)
+        setFetchApiStatusCode(err.response.status)
       }
       setLoading(false)
     }
@@ -52,18 +48,18 @@ const Home: NextPage<TProps> = () => {
       const result = await fetchTvShowsListApi()
       setTvShowsList(result.slice(0, 10))
       setLoading(false)
-      setFetchApiStatus(200)
+      setFetchApiStatusCode(200)
     } catch (error: any) {
       const err = error as AxiosError
       if (err.response) {
-        setFetchApiStatus(err.response.status)
+        setFetchApiStatusCode(err.response.status)
       }
       setLoading(false)
     }
   }
 
   const onChangeActiveTab = (newValue: TActiveTab): void => {
-    setFetchApiStatus(200)
+    setFetchApiStatusCode(200)
     if (newValue === "tv-shows" && tvShowsList.length === 0) {
       fetchTvShows()
     }
@@ -87,7 +83,7 @@ const Home: NextPage<TProps> = () => {
           activeTab={activeTab}
           setActiveTab={onChangeActiveTab}
         />
-        <ErrorHandler statusCode={fetchApiStatus} >
+        <ErrorHandler statusCode={fetchApiStatusCode} >
           <CarouselContainer>
             <Carousel
               loading={loading}
@@ -100,6 +96,27 @@ const Home: NextPage<TProps> = () => {
       </div>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  const res = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`)
+  if (res.status === 200 || res.status === 201) {
+    const moviesData: TMoviesApiResponse = await res.json()
+    const moviesListApiResult = moviesData.results.slice(0, 10)
+    return {
+      props: {
+        statusCode: 200,
+        moviesListApiResult,
+      },
+    }
+  } else {
+    return ({
+      props: {
+        statusCode: res.status,
+        moviesListApiResult: [],
+      }
+    })
+  }
 }
 
 // export default inject('testStore')(observer(Home))
