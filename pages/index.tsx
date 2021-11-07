@@ -23,7 +23,7 @@ const Home: NextPage<TProps> = () => {
   const [moviesList, setMoviesList] = useState<TMovie[]>([])
   const [tvShowsList, setTvShowsList] = useState<TTvShows[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [fetchApiErrorStatus, setFetchApiErrorStatus] = useState<number>(200)
+  const [fetchApiStatus, setFetchApiStatus] = useState<number | undefined>()
 
   useEffect(() => {
     fetchMovies()
@@ -34,15 +34,15 @@ const Home: NextPage<TProps> = () => {
     try {
       setLoading(true)
       const result = await fetchMoviesListApi()
-      setMoviesList(result.slice(0,10))
-      setFetchApiErrorStatus(200)
+      setMoviesList(result.slice(0, 10))
       setLoading(false)
+      setFetchApiStatus(200)
     } catch (error) {
       const err = error as AxiosError
       if (err.response) {
-        setFetchApiErrorStatus(err.response.status)
-        setLoading(false)
+        setFetchApiStatus(err.response.status)
       }
+      setLoading(false)
     }
   }
 
@@ -50,20 +50,20 @@ const Home: NextPage<TProps> = () => {
     try {
       setLoading(true)
       const result = await fetchTvShowsListApi()
-      setTvShowsList(result.slice(0,10))
-      setFetchApiErrorStatus(200)
-      return setLoading(false)
+      setTvShowsList(result.slice(0, 10))
+      setLoading(false)
+      setFetchApiStatus(200)
     } catch (error: any) {
       const err = error as AxiosError
       if (err.response) {
-        setFetchApiErrorStatus(err.response.status)
+        setFetchApiStatus(err.response.status)
       }
-      return setLoading(false)
+      setLoading(false)
     }
   }
 
   const onChangeActiveTab = (newValue: TActiveTab): void => {
-    setFetchApiErrorStatus(200)
+    setFetchApiStatus(200)
     if (newValue === "tv-shows" && tvShowsList.length === 0) {
       fetchTvShows()
     }
@@ -87,7 +87,7 @@ const Home: NextPage<TProps> = () => {
           activeTab={activeTab}
           setActiveTab={onChangeActiveTab}
         />
-        <ErrorHandler statusCode={fetchApiErrorStatus} >
+        <ErrorHandler statusCode={fetchApiStatus} >
           <CarouselContainer>
             <Carousel
               loading={loading}

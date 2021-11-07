@@ -1,4 +1,4 @@
 
 export type TErrorHandlerProps = {
-    statusCode: number
+    statusCode: number | undefined
 }
