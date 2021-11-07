@@ -1,6 +1,6 @@
-export type ActiveTab = 'movies' | 'tv-shows'
+export type TActiveTab = 'movies' | 'tv-shows'
 
 export type TProps = {
-    activeTab: ActiveTab,
-    setActiveTab: (newValue: ActiveTab) => void
+    activeTab: TActiveTab,
+    setActiveTab: (newValue: TActiveTab) => void
 }

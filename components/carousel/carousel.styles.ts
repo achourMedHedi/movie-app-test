@@ -5,18 +5,13 @@ import styled from "@emotion/styled";
 export const CarouselContainer = styled.div`
     position: relative;
     overflow: hidden;
-
-    @media (max-width: 375px) {
-        // overflow: scroll;
-    }
 `
 
-export const CarouselItemsContainer = styled.div`
+export const CarouselItemsContainer = styled.div<any>`
     display: flex;
-    transform: ${props => `translateX(${-(props.translate * 320)}px)`};
+    transform: ${({ translate }) => `translateX(${-(translate * 320) + 20}px)`};
     transition: transform 0.3s;
     position: relative;
-   
 `
 
 export const CarouselItem = styled.div`
@@ -29,16 +24,16 @@ export const CarouselItem = styled.div`
     }
 `
 
-export const SwitchArrow = styled.button`
+export const SwitchArrow = styled.button<any>`
     height: 100%;
     position: absolute;
-    left: ${props => props.direction === 'left' && "0"};
+    left: ${({ direction }) => direction === 'left' && "0"};
     top: 0;
-    right: ${props => props.direction === 'right' && "0"};
+    right: ${({ direction }) => direction === 'right' && "0"};
     z-index: 1;
     width: 300px;
     height: 360px;
-    background: ${props => `linear-gradient(to ${props.direction}, transparent , white , white  )`};
+    background: ${({ direction }) => `linear-gradient(to ${direction}, transparent , white , white  )`};
     border: none;
     outline: none;
     cursor: pointer;
@@ -67,12 +62,12 @@ export const MobileStepsContainer = styled.div`
 `
 
 
-export const MobileStep = styled.div`
+export const MobileStep = styled.div<any>`
     height: 8px;
     border-radius: 999px;
-    width: ${props => props.isActive ? 20 : 8}px;
-    background: ${props => props.isActive ? "#522583" : "#522583"};
-    opacity: ${props => props.isActive ? "1" : "0.3"};
+    width: ${({ isActive }) => isActive ? 20 : 8}px;
+    background: ${({ isActive }) => isActive ? "#522583" : "#522583"};
+    opacity: ${({ isActive }) => isActive ? "1" : "0.3"};
     margin-right: 8px;
     display: none;
 

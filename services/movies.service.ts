@@ -1,0 +1,7 @@
+import axios from "axios"
+import { API_KEY } from "../contants"
+
+export const fetchMoviesListApi = async () => {
+    const result = await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`)
+    return result.data.results
+}

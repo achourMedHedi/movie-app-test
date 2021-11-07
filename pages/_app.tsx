@@ -3,8 +3,10 @@ import React from "react";
 import { Provider } from "mobx-react";
 import { fetchInitialStoreState, TestStore } from "../stores/TestStore";
 import '../styles/globals.css'
+import { AppPagesContainer } from "../styles/appPage.styles";
+import Footer from "../components/footer/Footer.component";
 
-interface IState  {
+interface IState {
   testStore: TestStore,
 }
 class MyApp extends App {
@@ -33,7 +35,10 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <Provider testStore={this.state.testStore}>
-        <Component {...pageProps} />
+        <AppPagesContainer>
+          <Component {...pageProps} />
+        </AppPagesContainer>
+        <Footer />
       </Provider>
     );
   }

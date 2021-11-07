@@ -1,6 +1,6 @@
 import { FC } from "react";
 import IProps from "./Header.types";
-import styles, { HeaderTitle } from "./styles";
+import styles, { HeaderTitle } from "./header.styles";
 
 
 const Header: FC<IProps> = ({ title, subTitle, description }): JSX.Element => {

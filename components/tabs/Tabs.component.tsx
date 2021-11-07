@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { Tab, TabsContainer } from "./styles";
-import { TProps } from "./Tabs.types";
+import { Tab, TabsContainer } from "./tabs.styles";
+import { TProps } from "./tabs.types";
 
 
 const Tabs: FC<TProps> = ({ setActiveTab, activeTab }): JSX.Element => (
