@@ -1,4 +1,4 @@
-Technologie used:
+Technologies used:
 - React js / Next js
 - Mobx
 - Emotion
